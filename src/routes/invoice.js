@@ -20,15 +20,7 @@ router.get("/getAddCustomer", (req, res) => {
     }
   });
 });
-router.get("/getCustomer", (req, res) => {
-  InvoiceController.getSplynxCustomerSector((err, invoices) => {
-    if (err) {
-      res.status(400).json(err);
-    } else {
-      res.status(200).json(invoices);
-    }
-  });
-});
+
 router.get("/getTickets", (req, res) => {
   InvoiceController.getSplynxTickets((err, invoices) => {
     if (err) {
