@@ -97,4 +97,51 @@ module.exports = {
         console.log("not working", err);
       });
   },
+  getSplynxCustomerSector(result) {
+    api
+      .login(SplynxApi.LOGIN_TYPE_API_KEY, {
+        key: loadedConfig.API_KEY,
+        secret: loadedConfig.API_SECRET,
+      })
+      .then((logins) => {
+        console.log(logins);
+        let url = "admin/customers/customer/3/internet-services";
+        api
+          .get(url)
+          .then((updates) => {
+            //create services
+            console.log(updates);
+            result(null, updates);
+          })
+          .catch((err) => {
+            result(err, null);
+          });
+      })
+      .catch((err) => {
+        console.log("not working", err);
+      });
+  },
+  getSplynxSectors(result) {
+    api
+      .login(SplynxApi.LOGIN_TYPE_API_KEY, {
+        key: loadedConfig.API_KEY,
+        secret: loadedConfig.API_SECRET,
+      })
+      .then((logins) => {
+        console.log(logins);
+        let url = "admin/networking/routers-sectors";
+        api
+          .get(url)
+          .then((updates) => {
+            //create services
+            result(null, updates);
+          })
+          .catch((err) => {
+            result(err, null);
+          });
+      })
+      .catch((err) => {
+        console.log("not working", err);
+      });
+  },
 };
