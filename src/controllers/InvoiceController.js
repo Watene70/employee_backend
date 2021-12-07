@@ -1,8 +1,8 @@
 const sequelize = require("sequelize");
 const axios = require("axios");
-const Lead = require("../../models").Lead;
-const Update = require("../../models").Update;
 const op = sequelize.Op;
+
+//initialization
 const SplynxApi = require("splynx-nodejs-api");
 var setup = {
   envs: {
@@ -33,206 +33,68 @@ var loadedConfig = setup.envs[env]; //declared variables in live and test
 const api = new SplynxApi(loadedConfig.SPLYNX_HOST);
 api.version = SplynxApi.API_VERSION_2_0;
 module.exports = {
-  getLeads(result) {
-    Lead.findAll({ attributes: ["*"], where: { processed: 0 }, raw: true })
-      .then((leads) => {
-        result(null, leads);
-      })
-      .catch((err) => {
-        result(err, null);
-      });
-  },
-  getCustomers(result) {
-    Update.findAll({ attributes: ["*"], where: { processed: 0 }, raw: true })
-      .then((leads) => {
-        result(null, leads);
-      })
-      .catch((err) => {
-        result(err, null);
-      });
-  },
-  postToNav(data, result) {
-    console.log(data);
-    for (let i = 0; i < data.length; i++) {
-      let indiv = {
-        Name: data[i].name,
-        CustomerCategory: 1,
-        Address: data[i].address,
-        PhoneNumber: data[i].phone_number,
-        EmailAddress: data[i].email,
-        Region: data[i].county,
-        Package: data[i].package,
-      };
-      let json = JSON.stringify(indiv);
-      console.log(json);
-      var config = {
-        method: "post",
-        url: "https://cloud.cft.co.ke/index.php/api/general/CreateCustomer",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        data: json,
-      };
-      axios(config)
-        .then((res) => {
-          //update column
-          Lead.update({ processed: 1 }, { where: { id: data[i].id } })
-            .then((upda) => {
-              console.log(upda);
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-          result(null, JSON.stringify(res.data));
-        })
-        .catch((error) => {
-          console.log(error);
-          result(error.message, null);
-        });
-    }
-  },
-  createLeads(allData, result) {
-    var arr = [];
-    let ids = [];
-    api
-      .login(SplynxApi.LOGIN_TYPE_API_KEY, {
-        key: loadedConfig.API_KEY,
-        secret: loadedConfig.API_SECRET,
-      })
-      .then((logins) => {
-        for (let r = 0; r < allData.length; r++) {
-          var update = {
-            name: allData[r].customer_name,
-            email: allData[r].customer_email,
-            phone: allData[r].customer_phone,
-            login: allData[r].id,
-          };
-          let url = "admin/customers/customer/";
-          api
-            .post(url, update)
-            .then((updates) => {
-              //create services
-              var service = {
-                tariff_id: allData[r].splynx_package,
-                customer_id: updates.response.id,
-                status: "active",
-                description: "Some Description",
-                quantity: 1,
-                start_date: new Date().toISOString().slice(0, 10),
-                end_date: "0000-00-00",
-                login: allData[r].id,
-                taking_ipv4: 0,
-              };
-              let urls =
-                "admin/customers/customer/" +
-                updates.response.id +
-                "/internet-services";
-              api
-                .post(urls, service)
-                .then((services) => {
-                  let is = parseInt(allData[r].id);
-                  Update.update({ processed: 1 }, { where: { id: is } })
-                    .then((upda) => {
-                      console.log(upda);
-                    })
-                    .catch((err) => {
-                      result(err, null);
-                    });
-                })
-                .catch((err) => {
-                  console.log("services errors  are", err);
-                });
-              result(null, { message: "All leads added" });
-            })
-            .catch((err) => {
-              console.log("error is", err);
-            });
-        }
-        console.log(ids);
-      })
-      .catch((err) => {
-        console.log("not working", err);
-        result(err, null);
-      });
-  },
-  createSingleLead(allData, result) {
-    api
-      .login(SplynxApi.LOGIN_TYPE_API_KEY, {
-        key: loadedConfig.API_KEY,
-        secret: loadedConfig.API_SECRET,
-      })
-      .then((logins) => {
-        var update = {
-          name: allData.customer_name,
-          email: allData.customer_email,
-          phone: allData.customer_phone,
-          login: allData.customer_id,
-        };
-        let url = "admin/customers/customer/";
-        api
-          .post(url, update)
-          .then((updates) => {
-            //create services
-            var service = {
-              tariff_id: allData.tarrif_id,
-              customer_id: updates.response.id,
-              status: "active",
-              description: "Some Description",
-              quantity: 1,
-              start_date: new Date().toISOString().slice(0, 10),
-              end_date: "0000-00-00",
-              login: allData.customer_id,
-              taking_ipv4: 0,
-            };
-            let urls =
-              "admin/customers/customer/" +
-              updates.response.id +
-              "/internet-services";
-            api
-              .post(urls, service)
-              .then((services) => {
-                result(null, { message: "Lead Successfully added" });
-              })
-              .catch((err) => {
-                result({ message: "This error has occured", err }, null);
-              });
-          })
-          .catch((err) => {
-            result({ error: err }, null);
-          });
-      })
-      .catch((err) => {
-        result({ error: err }, null);
-      });
-  },
-  postSingleToNav(data, result) {
-    let datas = {
-      Name: data.name,
-      CustomerCategory: data.category,
-      Address: data.address,
-      PhoneNumber: data.phone_number,
-      EmailAddress: data.email,
-      Region: data.county,
-      Package: data.package,
-    };
+  getNavInvoices(result) {
     var config = {
-      method: "post",
-      url: "https://cloud.cft.co.ke/index.php/api/general/CreateCustomer",
+      method: "get",
+      url: "http://It-support:2020Mawingu@102.133.170.192:7058/MawinguLive/ODataV4/Company(%27MAWINGU%20NETWORKS%20LTD%27)/Posted_Sales_Invoices",
       headers: {
         "Content-Type": "application/json",
       },
-      data: datas,
     };
     axios(config)
       .then((res) => {
-        result(null, {
-          message:
-            "Customer added to Nav ID:" + JSON.stringify(res.data.response),
-        });
+        //update column
+        console.log(res);
       })
       .catch((error) => {
         console.log(error);
-        result({ error: error.message }, null);
+        result(error.message, null);
+      });
+  },
+  getSplynxTickets(result) {
+    api
+      .login(SplynxApi.LOGIN_TYPE_API_KEY, {
+        key: loadedConfig.API_KEY,
+        secret: loadedConfig.API_SECRET,
+      })
+      .then((logins) => {
+        console.log(logins);
+        let url = "admin/support/tickets";
+        api
+          .get(url)
+          .then((updates) => {
+            //create services
+            result(null, updates);
+          })
+          .catch((err) => {
+            result(err, null);
+          });
+      })
+      .catch((err) => {
+        console.log("not working", err);
+      });
+  },
+  getSplynxCustomers(result) {
+    api
+      .login(SplynxApi.LOGIN_TYPE_API_KEY, {
+        key: loadedConfig.API_KEY,
+        secret: loadedConfig.API_SECRET,
+      })
+      .then((logins) => {
+        console.log(logins);
+        let url = "admin/customers/customer";
+        api
+          .get(url)
+          .then((updates) => {
+            //create services
+            result(null, updates);
+          })
+          .catch((err) => {
+            result(err, null);
+          });
+      })
+      .catch((err) => {
+        console.log("not working", err);
       });
   },
 };

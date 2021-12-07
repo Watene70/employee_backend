@@ -1,4 +1,4 @@
-const invoice = reqiure("./invoice");
+const invoice = require("./invoice");
 module.exports = {
   invoice,
 };

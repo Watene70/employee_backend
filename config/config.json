@@ -1,23 +1,40 @@
 {
   "development": {
     "username": "root",
-    "password": null,
-    "database": "database_development",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
+    "password": "r6r5bb!!",
+    "database": "db_development",
+    "host": "169.239.171.27",
+    "dialect": "mysql",
+    "operatorsAliases": false,
+    "dialectOptions": {
+      "useUTC": true
+    },
+    "timezone": "+03:00"
   },
+
   "test": {
     "username": "root",
-    "password": null,
-    "database": "database_test",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
+    "password": "r6r5bb!!",
+    "database": "db_test",
+    "host": "169.239.171.27",
+    "dialect": "mysql",
+    "operatorsAliases": false,
+    "dialectOptions": {
+      "useUTC": true
+    },
+    "timezone": "+03:00"
   },
+
   "production": {
     "username": "root",
-    "password": null,
-    "database": "database_production",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
+    "password": "r6r5bb!!",
+    "database": "crm_production",
+    "host": "169.239.171.27",
+    "dialect": "mysql",
+    "operatorsAliases": false,
+    "dialectOptions": {
+      "useUTC": true
+    },
+    "timezone": "+03:00"
   }
 }
