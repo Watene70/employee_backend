@@ -1,28 +1,61 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
 module.exports = (sequelize, DataTypes) => {
-  class splynx_customers extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-      // define association here
+  const Splynx_customers = sequelize.define(
+    "Splynx_customers",
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      customer_number: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      customer_id: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      location: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      package: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      login: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      router_contention: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      status: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      created_at: {
+        allowNull: false,
+        type: DataTypes.DATE,
+        defaultValue: Date.now,
+      },
+      updated_at: {
+        type: DataTypes.DATE,
+        defaultValue: Date.now,
+      },
+    },
+    {
+      timestamps: false,
+      freezeTableName: true,
+      tableName: "splynx_customers",
+      operatorsAliases: false,
     }
+  );
+  Splynx_customers.associate = function (models) {
+    // associations can be defined here
   };
-  splynx_customers.init({
-    customer_number: DataTypes.STRING,
-    customer_id: DataTypes.STRING,
-    location: DataTypes.STRING,
-    package: DataTypes.STRING,
-    login: DataTypes.STRING,
-    router_contention: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'splynx_customers',
-  });
-  return splynx_customers;
+  return Splynx_customers;
 };

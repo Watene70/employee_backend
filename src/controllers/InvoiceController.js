@@ -1,7 +1,7 @@
 const sequelize = require("sequelize");
 const axios = require("axios");
 const op = sequelize.Op;
-const splinx = require("../../models").splynx_customers;
+const splinx = require("../../models").Splynx_customers;
 
 //initialization
 const SplynxApi = require("splynx-nodejs-api");
@@ -82,50 +82,40 @@ module.exports = {
         secret: loadedConfig.API_SECRET,
       })
       .then((logins) => {
-        console.log(logins);
         let url = "admin/customers/customer";
+        let splinxCustomers = [];
         api
           .get(url)
-          .then((updates) => {
-            // console.log(updates);
+          .then((customers) => {
             //create services
-            let splinxCustomers = [];
+            let updates = customers.response;
+            console.log("all after pull length ", updates);
             for (let i = 0; i < updates.length; i++) {
-              let url =
-                "admin/customers/customer/" +
-                updates[i].id +
-                "/internet-services";
-              api
-                .get(url)
-                .then((data) => {
-                  //create services
-                  splinxCustomers.push({
-                    customer_number: updates[i].login,
-                    customer_id: updates[i].id,
-                    location: updates[i].city,
-                    status: updates[i].status,
-                    router_contention: updates[i].sector_id,
-                    package: data[data.length - 1].description,
-                  });
-                  console.log("did I get here", splinxCustomers);
-                })
-                .catch((err) => {
-                  console.log(err);
-                });
+              splinxCustomers.push({
+                customer_number: updates[i].login,
+                customer_id: updates[i].id,
+                location: updates[i].city,
+                status: updates[i].status,
+                router_contention: updates[i].sector_id,
+                created_at: Date.now(),
+                updated_at: Date.now(),
+                status: updates[i].status,
+              });
             }
             splinx
               .bulkCreate(splinxCustomers, {
                 fields: [
-                  "customer_numeber",
+                  "customer_number",
                   "customer_id",
                   "location",
                   "status",
                   "router_contention",
-                  "package",
+                  "created_at",
+                  "updated_at",
+                  "status",
                 ],
               })
               .then((solve) => {
-                console.log("confirm this", solve);
                 result(null, {
                   message: "Customer pulled and created",
                 });
@@ -140,12 +130,23 @@ module.exports = {
               });
           })
           .catch((err) => {
-            result(err, null);
+            result(
+              {
+                error: err.message,
+              },
+              null
+            );
           });
       })
       .catch((err) => {
-        console.log("not working", err);
+        result(
+          {
+            error: err.message,
+          },
+          null
+        );
       });
+    // console.log(logins);
   },
   getSplynxCustomerSector(result) {
     api
