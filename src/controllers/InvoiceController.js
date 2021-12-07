@@ -195,4 +195,60 @@ module.exports = {
         console.log("not working", err);
       });
   },
+  updateInternetServices(data, result) {
+    api
+      .login(SplynxApi.LOGIN_TYPE_API_KEY, {
+        key: loadedConfig.API_KEY,
+        secret: loadedConfig.API_SECRET,
+      })
+      .then((logins) => {
+        console.log("found customElements", data);
+        for (let i = 0; i < data.length; i++) {
+          console.log("found customer", data[i].customer_id);
+          // admin/customers/customer/3/internet-services
+          let urls =
+            "admin/customers/customer/" +
+            data[i].customer_id +
+            "/internet-services";
+          api
+            .get(urls)
+            .then((updates) => {
+              // update customertable
+              console.log("found service", updates);
+              let resp = updates.response;
+              splinx
+                .update(
+                  {
+                    processed: 1,
+                    router_contention: resp[resp.length - 1].sector_id,
+                  },
+                  { where: { customer_id: data[i].customer_id } }
+                )
+                .then((upda) => {
+                  console.log(upda);
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+            })
+            .catch((err) => {
+              console.log("error getting service", err);
+            });
+        }
+        result(null, "customers updated");
+      })
+      .catch((err) => {
+        console.log("not working", err);
+      });
+  },
+  getCustomers(result) {
+    splinx
+      .findAll({ attributes: ["*"], where: { processed: 0 }, raw: true })
+      .then((leads) => {
+        result(null, leads);
+      })
+      .catch((err) => {
+        result(err, null);
+      });
+  },
 };
