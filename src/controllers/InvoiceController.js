@@ -45,7 +45,7 @@ module.exports = {
     axios(config)
       .then((res) => {
         //update column
-        console.log(res);
+        // console.log(res);
       })
       .catch((error) => {
         console.log(error);
@@ -87,8 +87,9 @@ module.exports = {
         api
           .get(url)
           .then((updates) => {
-            // console.log(updates);
+            console.log(updates.length);
             //create services
+
             let splinxCustomers = [];
             for (let i = 0; i < updates.length; i++) {
               let url =
@@ -99,6 +100,7 @@ module.exports = {
                 .get(url)
                 .then((data) => {
                   //create services
+                  console.log("na hapa je!!", data);
                   splinxCustomers.push({
                     customer_number: updates[i].login,
                     customer_id: updates[i].id,
