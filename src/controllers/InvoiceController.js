@@ -87,6 +87,7 @@ module.exports = {
         api
           .get(url)
           .then((updates) => {
+            // console.log(updates);
             //create services
             let splinxCustomers = [];
             for (let i = 0; i < updates.length; i++) {
@@ -106,6 +107,7 @@ module.exports = {
                     router_contention: updates[i].sector_id,
                     package: data[data.length - 1].description,
                   });
+                  console.log("did I get here", splinxCustomers);
                 })
                 .catch((err) => {
                   console.log(err);
@@ -123,6 +125,7 @@ module.exports = {
                 ],
               })
               .then((solve) => {
+                console.log("confirm this", solve);
                 result(null, {
                   message: "Customer pulled and created",
                 });
