@@ -1,6 +1,7 @@
 const sequelize = require("sequelize");
 const axios = require("axios");
 const op = sequelize.Op;
+const splinx = require("../../models").splynx_customers;
 
 //initialization
 const SplynxApi = require("splynx-nodejs-api");
@@ -87,7 +88,53 @@ module.exports = {
           .get(url)
           .then((updates) => {
             //create services
-            result(null, updates);
+            let splinxCustomers = [];
+            for (let i = 0; i < updates.length; i++) {
+              let url =
+                "admin/customers/customer/" +
+                updates[i].id +
+                "/internet-services";
+              api
+                .get(url)
+                .then((data) => {
+                  //create services
+                  splinxCustomers.push({
+                    customer_number: updates[i].login,
+                    customer_id: updates[i].id,
+                    location: updates[i].city,
+                    status: updates[i].status,
+                    router_contention: updates[i].sector_id,
+                    package: data[data.length - 1].description,
+                  });
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+            }
+            splinx
+              .bulkCreate(splinxCustomers, {
+                fields: [
+                  "customer_numeber",
+                  "customer_id",
+                  "location",
+                  "status",
+                  "router_contention",
+                  "package",
+                ],
+              })
+              .then((solve) => {
+                result(null, {
+                  message: "Customer pulled and created",
+                });
+              })
+              .catch((err) => {
+                result(
+                  {
+                    error: err.message,
+                  },
+                  null
+                );
+              });
           })
           .catch((err) => {
             result(err, null);

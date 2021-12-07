@@ -11,6 +11,15 @@ router.get("/", (req, res) => {
     }
   });
 });
+router.get("/getAddCustomer", (req, res) => {
+  InvoiceController.getSplynxCustomers((err, invoices) => {
+    if (err) {
+      res.status(400).json(err);
+    } else {
+      res.status(200).json(invoices);
+    }
+  });
+});
 router.get("/getCustomer", (req, res) => {
   InvoiceController.getSplynxCustomerSector((err, invoices) => {
     if (err) {
