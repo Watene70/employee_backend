@@ -67,8 +67,8 @@ module.exports = {
       })
       .then((logins) => {
         console.log(logins);
-        // let url = "admin/networking/routers-sectors";
-        let url = "admin/tariffs/internet/";
+        let url = "admin/networking/routers-sectors";
+        // let url = "admin/tariffs/internet/";
         let towerSector = [];
 
         api
