@@ -2,6 +2,7 @@ const sequelize = require("sequelize");
 const axios = require("axios");
 const op = sequelize.Op;
 const splinx = require("../../models").Splynx_customers;
+const stations = require("../../models").sectors;
 
 //initialization
 const SplynxApi = require("splynx-nodejs-api");
@@ -89,7 +90,7 @@ module.exports = {
           .then((customers) => {
             //create services
             let updates = customers.response;
-            console.log("all after pull length ", updates);
+            // console.log("all after pull length ", updates);
             for (let i = 0; i < updates.length; i++) {
               splinxCustomers.push({
                 customer_number: updates[i].login,
@@ -161,7 +162,7 @@ module.exports = {
           .get(url)
           .then((updates) => {
             //create services
-            console.log(updates);
+            // console.log(updates);
             result(null, updates);
           })
           .catch((err) => {
@@ -181,11 +182,31 @@ module.exports = {
       .then((logins) => {
         console.log(logins);
         let url = "admin/networking/routers-sectors";
+        let towerSector = [];
         api
           .get(url)
           .then((updates) => {
             //create services
-            result(null, updates);
+            let towers = updates.response;
+            // console.log("all after pull length ", towers);
+            
+            for (let i = 0; i < towers.length; i++) {
+              towerSector.push({
+                router_id: towers[i].router_id,
+                title: towers[i].title,
+                created_at: Date.now(),
+                updated_at: Date.now(),
+              });
+            }
+            stations
+              .bulkCreate(towerSector, {
+                fields: ["router_id", "title", "created_at", "updated_at"],
+              })
+              .then((solution) => {
+                result(null, {
+                  message: "Sector updated in Pweza",
+                });
+              });
           })
           .catch((err) => {
             result(err, null);

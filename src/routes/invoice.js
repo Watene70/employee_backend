@@ -39,4 +39,13 @@ router.get("/getSectors", (req, res) => {
     }
   });
 });
+router.get("/getRouterContention", (req, res) => {
+  InvoiceController.getSplynxCustomerSector((err, sectors) => {
+    if (err) {
+      res.status(400).json(err);
+    } else {
+      res.status(200).json(sectors);
+    }
+  });
+});
 module.exports = router;
