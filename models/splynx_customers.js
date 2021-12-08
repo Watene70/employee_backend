@@ -18,10 +18,14 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
       },
       location: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         allowNull: true,
       },
       package: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      geolocation: {
         type: DataTypes.STRING,
         allowNull: true,
       },
@@ -39,6 +43,10 @@ module.exports = (sequelize, DataTypes) => {
       },
       processed: {
         type: DataTypes.BOOLEAN,
+        allowNull: true,
+      },
+      geolocation: {
+        type: DataTypes.STRING,
         allowNull: true,
       },
       created_at: {

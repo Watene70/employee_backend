@@ -18,6 +18,10 @@ module.exports = {
         allowNull: true,
       },
       location: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
+      geolocation: {
         type: Sequelize.STRING,
         allowNull: true,
       },

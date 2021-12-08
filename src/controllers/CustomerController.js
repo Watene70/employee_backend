@@ -43,24 +43,26 @@ module.exports = {
       .then((logins) => {
         let url = "admin/customers/customer";
         let splinxCustomers = [];
+        // console.log(splinxCustomers);
         api
           .get(url)
           .then((customers) => {
             //create services
             let updates = customers.response;
-            console.log("all after pull length ", updates);
+            // console.log("all after pull length ", updates);
             for (let i = 0; i < updates.length; i++) {
               splinxCustomers.push({
                 customer_number: updates[i].login,
                 customer_id: updates[i].id,
-                location: updates[i].city,
+                location: updates[i].location_id,
                 status: updates[i].status,
-                router_contention: updates[i].sector_id,
+                geolocation: updates[i].gps,
                 created_at: Date.now(),
                 updated_at: Date.now(),
                 status: updates[i].status,
               });
             }
+            // console.log(splinxCustomers);
             splinx
               .bulkCreate(splinxCustomers, {
                 fields: [
@@ -68,13 +70,14 @@ module.exports = {
                   "customer_id",
                   "location",
                   "status",
-                  "router_contention",
+                  "geolocation",
                   "created_at",
                   "updated_at",
                   "status",
                 ],
               })
               .then((solve) => {
+                console.log(solve);
                 result(null, {
                   message: "Customer pulled and created",
                 });
@@ -82,7 +85,7 @@ module.exports = {
               .catch((err) => {
                 result(
                   {
-                    error: err.message,
+                    errorbulkCreate: err,
                   },
                   null
                 );
@@ -91,7 +94,7 @@ module.exports = {
           .catch((err) => {
             result(
               {
-                error: err.message,
+                errorfetch: err.message,
               },
               null
             );
@@ -100,7 +103,7 @@ module.exports = {
       .catch((err) => {
         result(
           {
-            error: err.message,
+            errorlogin: err.message,
           },
           null
         );
@@ -115,9 +118,9 @@ module.exports = {
         secret: loadedConfig.API_SECRET,
       })
       .then((logins) => {
-        console.log("found customElements", data);
+        // console.log("found customElements", data);
         for (let i = 0; i < data.length; i++) {
-          console.log("found customer", data[i].customer_id);
+          // console.log("found customer", data[i].customer_id);
           // admin/customers/customer/3/internet-services
           let urls =
             "admin/customers/customer/" +
@@ -127,7 +130,7 @@ module.exports = {
             .get(urls)
             .then((updates) => {
               // update customertable
-              console.log("found service", updates);
+              // console.log("found service", updates);
               let resp = updates.response;
               splinx
                 .update(

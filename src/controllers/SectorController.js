@@ -67,14 +67,16 @@ module.exports = {
       })
       .then((logins) => {
         console.log(logins);
-        let url = "admin/networking/routers-sectors";
+        // let url = "admin/networking/routers-sectors";
+        let url = "admin/tariffs/internet/";
         let towerSector = [];
+
         api
           .get(url)
           .then((updates) => {
             //create services
             let towers = updates.response;
-            // console.log("all after pull length ", towers);
+            console.log("all after pull length ", towers);
 
             for (let i = 0; i < towers.length; i++) {
               towerSector.push({
