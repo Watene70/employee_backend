@@ -40,17 +40,6 @@ router.get("/getSectors", (req, res) => {
     }
   });
 });
-<<<<<<< HEAD
-router.get("/getRouterContention", (req, res) => {
-  InvoiceController.getSplynxCustomerSector((err, sectors) => {
-    if (err) {
-      res.status(400).json(err);
-    } else {
-      res.status(200).json(sectors);
-    }
-  });
-});
-=======
 router.get("/updateRouter", (req, res) => {
   InvoiceController.getCustomers((err, cust) => {
     if (err) {
@@ -90,5 +79,4 @@ var Updateservices = cron.schedule("*/10 * * * * *", () => {
   });
 });
 Updateservices.start();
->>>>>>> d4c4a32963be9e5cf56260566a17d46845e7338f
 module.exports = router;
