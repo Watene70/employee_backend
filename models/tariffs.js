@@ -1,7 +1,7 @@
 "use strict";
 module.exports = (sequelize, DataTypes) => {
-  const sectors = sequelize.define(
-    "sectors",
+  const tariffs = sequelize.define(
+    "tariffs",
     {
       id: {
         type: DataTypes.INTEGER,
@@ -9,8 +9,8 @@ module.exports = (sequelize, DataTypes) => {
         autoIncrement: true,
         primaryKey: true,
       },
-      router_id: {
-        type: DataTypes.INTEGER,
+      tariff_id: {
+        type: DataTypes.STRING,
         allowNull: true,
       },
       title: {
@@ -30,12 +30,12 @@ module.exports = (sequelize, DataTypes) => {
     {
       timestamps: false,
       freezeTableName: true,
-      tableName: "sectors",
+      tableName: "tariffs",
       operatorsAliases: false,
     }
   );
-  sectors.associate = function (models) {
+  tariffs.associate = function (models) {
     // associations can be defined here
   };
-  return sectors;
+  return tariffs;
 };
