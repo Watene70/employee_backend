@@ -77,7 +77,7 @@ module.exports = {
                 ],
               })
               .then((solve) => {
-                console.log(solve);
+                // console.log(solve);
                 result(null, {
                   message: "Customer pulled and created",
                 });
