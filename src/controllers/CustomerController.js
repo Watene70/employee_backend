@@ -60,6 +60,7 @@ module.exports = {
                 created_at: Date.now(),
                 updated_at: Date.now(),
                 status: updates[i].status,
+                processed: 0,
               });
             }
             // console.log(splinxCustomers);
@@ -75,9 +76,16 @@ module.exports = {
                   "updated_at",
                   "status",
                 ],
+                updateOnDuplicate: [
+                  "status",
+                  "location",
+                  "geolocation",
+                  "updated_at",
+                  "processed",
+                ],
               })
               .then((solve) => {
-                console.log(solve);
+                // console.log(solve);
                 result(null, {
                   message: "Customer pulled and created",
                 });
@@ -130,16 +138,16 @@ module.exports = {
             .get(urls)
             .then((updates) => {
               // update customertable
-              // console.log("found service", updates);
+              //   console.log("found service", updates);
               let resp = updates.response;
+              let datas = {
+                processed: 1,
+                package: resp[resp.length - 1].tariff_id,
+                router_contention: resp[resp.length - 1].sector_id,
+              };
+              // console.log("to update fields", datas);
               splinx
-                .update(
-                  {
-                    processed: 1,
-                    router_contention: resp[resp.length - 1].sector_id,
-                  },
-                  { where: { customer_id: data[i].customer_id } }
-                )
+                .update(datas, { where: { customer_id: data[i].customer_id } })
                 .then((upda) => {
                   console.log(upda);
                 })
@@ -159,7 +167,12 @@ module.exports = {
   },
   getCustomers(result) {
     splinx
-      .findAll({ attributes: ["*"], where: { processed: 0 }, raw: true })
+      .findAll({
+        attributes: ["*"],
+        where: { processed: 0 },
+        raw: true,
+        limit: 200,
+      })
       .then((leads) => {
         result(null, leads);
       })

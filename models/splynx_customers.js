@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
       },
       package: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         allowNull: true,
       },
       geolocation: {
