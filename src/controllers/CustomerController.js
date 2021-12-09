@@ -149,14 +149,14 @@ module.exports = {
               splinx
                 .update(datas, { where: { customer_id: data[i].customer_id } })
                 .then((upda) => {
-                  // console.log(upda);
+                  console.log(upda);
                 })
                 .catch((err) => {
                   console.log(err);
                 });
             })
             .catch((err) => {
-              // console.log("error getting service", err);
+              console.log("error getting service", err);
             });
         }
         result(null, "customers updated");
@@ -166,18 +166,18 @@ module.exports = {
       });
   },
   getCustomers(result) {
-    // splinx
-    //   .findAll({
-    //     attributes: ["*"],
-    //     where: { processed: 0 },
-    //     raw: true,
-    //     limit: 200,
-    //   })
-    //   .then((leads) => {
-    //     result(null, leads);
-    //   })
-    //   .catch((err) => {
-    //     result(err, null);
-    //   });
+    splinx
+      .findAll({
+        attributes: ["*"],
+        where: { processed: 0 },
+        raw: true,
+        limit: 200,
+      })
+      .then((leads) => {
+        result(null, leads);
+      })
+      .catch((err) => {
+        result(err, null);
+      });
   },
 };
