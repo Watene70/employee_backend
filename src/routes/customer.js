@@ -32,24 +32,34 @@ router.get("/updateCustomerRouter", (req, res) => {
     }
   });
 });
-// var Updateservices = cron.schedule("*/10 * * * * *", () => {
-//   CustomerController.getCustomers((err, cust) => {
-//     if (err) {
-//       console.log(err);
-//     } else {
-//       if (cust.length > 0) {
-//         CustomerController.updateInternetServices(cust, (err, updated) => {
-//           if (err) {
-//             console.log(err);
-//           } else {
-//             console.log(updated);
-//           }
-//         });
-//       } else {
-//         console.log("no records to process");
-//       }
-//     }
-//   });
-// });
-// Updateservices.start();
+var Updateservices = cron.schedule("*/30 * * * * *", () => {
+  CustomerController.getCustomers((err, cust) => {
+    if (err) {
+      console.log(err);
+    } else {
+      if (cust.length > 0) {
+        CustomerController.updateInternetServices(cust, (err, updated) => {
+          if (err) {
+            console.log(err);
+          } else {
+            console.log(updated);
+          }
+        });
+      } else {
+        console.log("no records to process");
+      }
+    }
+  });
+});
+Updateservices.start();
+var AddCustomer = cron.schedule("*/5 * * * * ", () => {
+  CustomerController.getSplynxCustomers((err, invoices) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(invoices);
+    }
+  });
+});
+AddCustomer.start();
 module.exports = router;

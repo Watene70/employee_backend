@@ -60,6 +60,7 @@ module.exports = {
                 created_at: Date.now(),
                 updated_at: Date.now(),
                 status: updates[i].status,
+                processed: 0,
               });
             }
             // console.log(splinxCustomers);
@@ -74,6 +75,13 @@ module.exports = {
                   "created_at",
                   "updated_at",
                   "status",
+                ],
+                updateOnDuplicate: [
+                  "status",
+                  "location",
+                  "geolocation",
+                  "updated_at",
+                  "processed",
                 ],
               })
               .then((solve) => {
@@ -130,41 +138,46 @@ module.exports = {
             .get(urls)
             .then((updates) => {
               // update customertable
-              // console.log("found service", updates);
+              //   console.log("found service", updates);
               let resp = updates.response;
+              let datas = {
+                processed: 1,
+                package: resp[resp.length - 1].tariff_id,
+                router_contention: resp[resp.length - 1].sector_id,
+              };
+              // console.log("to update fields", datas);
               splinx
-                .update(
-                  {
-                    processed: 1,
-                    router_contention: resp[resp.length - 1].sector_id,
-                  },
-                  { where: { customer_id: data[i].customer_id } }
-                )
+                .update(datas, { where: { customer_id: data[i].customer_id } })
                 .then((upda) => {
-                  console.log(upda);
+                  // console.log(upda);
                 })
                 .catch((err) => {
                   console.log(err);
                 });
             })
             .catch((err) => {
-              console.log("error getting service", err);
+              // console.log("error getting service", err);
             });
         }
         result(null, "customers updated");
       })
       .catch((err) => {
-        console.log("not working", err);
+        // console.log("not working", err);
       });
   },
   getCustomers(result) {
-    splinx
-      .findAll({ attributes: ["*"], where: { processed: 0 }, raw: true })
-      .then((leads) => {
-        result(null, leads);
-      })
-      .catch((err) => {
-        result(err, null);
-      });
+    // splinx
+    //   .findAll({
+    //     attributes: ["*"],
+    //     where: { processed: 0 },
+    //     raw: true,
+    //     limit: 200,
+    //   })
+    //   .then((leads) => {
+    //     result(null, leads);
+    //   })
+    //   .catch((err) => {
+    //     result(err, null);
+    //   });
   },
 };

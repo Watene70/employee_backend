@@ -61,7 +61,7 @@ module.exports = {
                 updated_at: Date.now(),
               });
             }
-            console.log(internetTariff);
+            // console.log(internetTariff);
             internet
               .bulkCreate(internetTariff, {
                 fields: ["tariff_id", "title", "created_at", "updated_at"],
@@ -81,7 +81,7 @@ module.exports = {
           });
       })
       .catch((err) => {
-        console.log("not working", err);
+        // console.log("not working", err);
       });
   },
   // getTariffs(result) {
