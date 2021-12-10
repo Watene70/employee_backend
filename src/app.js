@@ -31,7 +31,14 @@ app.use(
 );
 
 // Import routes
-const { invoice, sector, ticket, customer, tariff } = require("./routes");
+const {
+  invoice,
+  sector,
+  ticket,
+  customer,
+  tariff,
+  location,
+} = require("./routes");
 
 // Initialize routes
 
@@ -40,4 +47,5 @@ app.use("/sector", sector);
 app.use("/ticket", ticket);
 app.use("/customer", customer);
 app.use("/tariff", tariff);
+app.use("/location", location);
 module.exports = app;

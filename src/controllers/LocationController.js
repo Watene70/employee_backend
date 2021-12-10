@@ -2,7 +2,7 @@ const sequelize = require("sequelize");
 const axios = require("axios");
 const op = sequelize.Op;
 const splinx = require("../../models").Splynx_customers;
-const stations = require("../../models").sectors;
+const eneo = require("../../models").location;
 
 //initialization
 const SplynxApi = require("splynx-nodejs-api");
@@ -35,7 +35,7 @@ var loadedConfig = setup.envs[env]; //declared variables in live and test
 const api = new SplynxApi(loadedConfig.SPLYNX_HOST);
 api.version = SplynxApi.API_VERSION_2_0;
 module.exports = {
-  getSplynxCustomerSector(result) {
+  getSplynxLocation(result) {
     api
       .login(SplynxApi.LOGIN_TYPE_API_KEY, {
         key: loadedConfig.API_KEY,
@@ -43,65 +43,44 @@ module.exports = {
       })
       .then((logins) => {
         console.log(logins);
-        let url = "admin/customers/customer/3/internet-services";
+        let url = "/admin/administration/locations";
         api
           .get(url)
           .then((updates) => {
             //create services
             // console.log(updates);
-            result(null, updates);
-          })
-          .catch((err) => {
-            result(err, null);
-          });
-      })
-      .catch((err) => {
-        console.log("not working", err);
-      });
-  },
-  getSplynxSectors(result) {
-    api
-      .login(SplynxApi.LOGIN_TYPE_API_KEY, {
-        key: loadedConfig.API_KEY,
-        secret: loadedConfig.API_SECRET,
-      })
-      .then((logins) => {
-        console.log(logins);
-        let url = "admin/networking/routers-sectors";
-        // let url = "admin/tariffs/internet/";
-        let towerSector = [];
-
-        api
-          .get(url)
-          .then((updates) => {
-            //create services
-            let towers = updates.response;
-            console.log("all after pull length ", towers);
-
-            for (let i = 0; i < towers.length; i++) {
-              towerSector.push({
-                router_id: towers[i].id,
-                title: towers[i].title,
-                created_at: Date.now(),
-                updated_at: Date.now(),
+            let locationPlan = updates.response;
+            let eneoLocation = [];
+            // console.log("all after pull length ", locationPlan);
+            for (let i = 0; i < locationPlan.length; i++) {
+              eneoLocation.push({
+                location_id: locationPlan[i].id,
+                title: locationPlan[i].name,
               });
             }
-            stations
-              .bulkCreate(towerSector, {
-                fields: ["router_id", "title", "created_at", "updated_at"],
+            console.log(eneoLocation);
+            eneo
+              .bulkCreate(eneoLocation, {
+                fields: ["location_id", "title"],
               })
-              .then((solution) => {
+              .then((infusion) => {
                 result(null, {
-                  message: "Sector updated in Pweza",
+                  message: "Locations updated in Pweza",
                 });
+              })
+              .catch((err) => {
+                console.log(err);
+                result(err, null);
               });
           })
+
           .catch((err) => {
+            console.log(err);
             result(err, null);
           });
       })
       .catch((err) => {
-        console.log("not working", err);
+        // console.log("not working", err);
       });
   },
 };

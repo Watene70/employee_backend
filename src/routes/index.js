@@ -3,6 +3,7 @@ const sector = require("./sector");
 const ticket = require("./ticket");
 const customer = require("./customer");
 const tariff = require("./tariff");
+const location = require("./location");
 
 module.exports = {
   invoice,
@@ -10,4 +11,5 @@ module.exports = {
   ticket,
   customer,
   tariff,
+  location,
 };
