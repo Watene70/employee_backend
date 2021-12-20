@@ -3,12 +3,13 @@ const axios = require("axios");
 const Invoices = require("../../models").sales_invoices;
 const Sales = require("../../models").sales_lines;
 //initialization
-
+var invoiceUrl = "http://It-Support:2020Mawingu@102.133.170.192:7058/MawinguLive/ODataV4/Company('MAWINGU%20NETWORKS%20LTD')/Power_BI_Posted_Sales_Invoices_Today";
+var salesLineUrl = "http://It-Support:2020Mawingu@102.133.170.192:7058/MawinguLive/ODataV4/Company('MAWINGU%20NETWORKS%20LTD')/Sales_Invoice";
 module.exports = {
   getNavInvoices(result) {
     var config = {
       method: "get",
-      url: "http://It-Support:2020Mawingu@102.133.170.192:7058/MawinguLive/ODataV4/Company('MAWINGU%20NETWORKS%20LTD')/Power_BI_Posted_Sales_Invoices_Today",
+      url: invoiceUrl,
       headers: {
         "Content-Type": "application/json",
       },
@@ -63,7 +64,7 @@ module.exports = {
   getNavSaleLines(result) {
     var config = {
       method: "get",
-      url: "http://It-Support:2020Mawingu@102.133.170.192:7058/MawinguLive/ODataV4/Company('MAWINGU%20NETWORKS%20LTD')/Sales_Invoice",
+      url: salesLineUrl,
       headers: {
         "Content-Type": "application/json",
       },

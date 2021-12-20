@@ -33,6 +33,7 @@ var loadedConfig = setup.envs[env]; //declared variables in live and test
 //initialization
 const api = new SplynxApi(loadedConfig.SPLYNX_HOST);
 api.version = SplynxApi.API_VERSION_2_0;
+
 module.exports = {
   getSplynxCustomers(result) {
     api
@@ -165,6 +166,7 @@ module.exports = {
         // console.log("not working", err);
       });
   },
+  
   getCustomers(result) {
     splinx
       .findAll({

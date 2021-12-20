@@ -21,4 +21,17 @@ router.get("/getAddLines", (req, res) => {
     }
   });
 });
+
+//cron to fetch invoices every 1 hour
+var getInvoicesCron = cron.schedule("0 * * * *", () => {
+  InvoiceController.getNavInvoices((err, invoices) => {
+    if (err) {
+      console.log("invoice error ",err);
+    } else {
+      console.log("sales invoices today ",invoices);
+    }
+  });
+});
+getInvoicesCron.start();
+
 module.exports = router;
