@@ -166,7 +166,6 @@ module.exports = {
         // console.log("not working", err);
       });
   },
-  
   getCustomers(result) {
     splinx
       .findAll({

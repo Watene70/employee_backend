@@ -72,7 +72,7 @@ module.exports = {
     console.log("its trying to call sales lines endpoint");
     axios(config)
       .then((res) => {
-        if(res.length > 0){
+        // if(res.length > 0){
         //update column
         //save ti invoice table
         let data = res.data.value;
@@ -111,10 +111,10 @@ module.exports = {
             .catch((err) => {
               result(err.message, null);
             });
-          } //end if res
-          else {
-            console.log("No data returned")
-          }
+          // } //end if res
+          // else {
+          //   console.log("No data returned")
+          // }
       })
       .catch((error) => {
         console.log(error);
