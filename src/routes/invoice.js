@@ -12,6 +12,7 @@ router.get("/getAddInvoices", (req, res) => {
     }
   });
 });
+
 router.get("/getAddLines", (req, res) => {
   InvoiceController.getNavSaleLines((err, invoices) => {
     if (err) {
@@ -33,5 +34,17 @@ var getInvoicesCron = cron.schedule("0 * * * *", () => {
   });
 });
 getInvoicesCron.start();
+
+//cron to fetch nav invoices sales line every 1 hour
+var getSalesLineCron = cron.schedule("0 * * * *", () => {
+  InvoiceController.getNavSaleLines((err, invoices) => {
+    if (err) {
+      console.log("sales lines invoice error ",err);
+    } else {
+      console.log("sales lines invoice today ",invoices);
+    }
+  });
+});
+getSalesLineCron.start(); //getNavSaleLines
 
 module.exports = router;

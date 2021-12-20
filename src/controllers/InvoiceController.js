@@ -14,7 +14,7 @@ module.exports = {
         "Content-Type": "application/json",
       },
     };
-    console.log("its trying to call endpoint");
+    console.log("its trying to call nav invoices endpoint");
     axios(config)
       .then((res) => {
         //save ti invoice table
@@ -69,14 +69,17 @@ module.exports = {
         "Content-Type": "application/json",
       },
     };
-    console.log("its trying to call endpoint");
+    console.log("its trying to call sales lines endpoint");
     axios(config)
       .then((res) => {
+        if(res.length > 0){
         //update column
         //save ti invoice table
         let data = res.data.value;
+        // console.log("sales line invoice ",data)
         let invoice = [];
         for (let i = 0; i < data.length; i++) {
+          // console.log(data[i], i)
           invoice.push({
             customer_no: data[i].Sell_to_Customer_No,
             invoice_number: data[i].No,
@@ -87,7 +90,8 @@ module.exports = {
             description: data[i].description,
             created_at: Date.now(),
             updated_at: Date.now(),
-          });
+          })
+        }
           Sales.bulkCreate(invoice, {
             fields: [
               "customer_no",
@@ -107,7 +111,10 @@ module.exports = {
             .catch((err) => {
               result(err.message, null);
             });
-        }
+          } //end if res
+          else {
+            console.log("No data returned")
+          }
       })
       .catch((error) => {
         console.log(error);
