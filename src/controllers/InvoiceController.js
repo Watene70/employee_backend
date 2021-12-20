@@ -82,6 +82,7 @@ module.exports = {
           // console.log(data[i], i)
           invoice.push({
             customer_no: data[i].Sell_to_Customer_No,
+            document_number: data[i].Document_No,
             invoice_number: data[i].No,
             amount: data[i].Amount,
             amount_inc_vat: data[i].Amount_Including_VAT,
@@ -92,6 +93,7 @@ module.exports = {
             updated_at: Date.now(),
           })
         }
+        // console.log(invoice)
           Sales.bulkCreate(invoice, {
             fields: [
               "customer_no",
@@ -103,6 +105,7 @@ module.exports = {
               "description",
               "created_at",
               "updated_at",
+              "document_number",
             ],
           })
             .then((resp) => {
@@ -113,7 +116,7 @@ module.exports = {
             });
           // } //end if res
           // else {
-          //   console.log("No data returned")
+            console.log(resp)
           // }
       })
       .catch((error) => {
