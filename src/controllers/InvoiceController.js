@@ -87,7 +87,7 @@ module.exports = {
             amount_inc_vat: data[i].Amount_Including_VAT,
             posting_date: data[i].Posting_Date,
             gl_account: data[i].No,
-            description: data[i].description,
+            description: data[i].Description,
             created_at: Date.now(),
             updated_at: Date.now(),
           })
