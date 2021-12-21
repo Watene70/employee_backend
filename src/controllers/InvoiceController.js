@@ -83,7 +83,7 @@ module.exports = {
           invoice.push({
             customer_no: data[i].Sell_to_Customer_No,
             document_number: data[i].Document_No,
-            invoice_number: data[i].No,
+            invoice_number: data[i].Document_No,
             amount: data[i].Amount,
             amount_inc_vat: data[i].Amount_Including_VAT,
             posting_date: data[i].Posting_Date,
