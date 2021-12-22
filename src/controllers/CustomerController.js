@@ -147,7 +147,7 @@ module.exports = {
                 package: resp[resp.length - 1].tariff_id,
                 router_contention: resp[resp.length - 1].sector_id,
               };
-              // console.log("to update fields", datas);
+              console.log("to update fields", datas);
               splinx
                 .update(datas, { where: { customer_id: data[i].customer_id } })
                 .then((upda) => {

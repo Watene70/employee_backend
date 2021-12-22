@@ -37,6 +37,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DATE,
         allowNull: true,
       },
+      document_number: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
       created_at: {
         allowNull: false,
         type: DataTypes.DATE,
