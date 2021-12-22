@@ -17,6 +17,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
       },
+      date_added: {
+        type: Sequelize.DATE,
+        allowNull: false,
+      },
       location: {
         type: Sequelize.INTEGER,
         allowNull: true,

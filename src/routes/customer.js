@@ -52,14 +52,14 @@ var Updateservices = cron.schedule("*/30 * * * * *", () => {
   });
 });
 Updateservices.start();
-var AddCustomer = cron.schedule("*/5 * * * * ", () => {
-  CustomerController.getSplynxCustomers((err, invoices) => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log(invoices);
-    }
-  });
-});
-AddCustomer.start();
+// var AddCustomer = cron.schedule("*/5 * * * * ", () => {
+//   CustomerController.getSplynxCustomers((err, invoices) => {
+//     if (err) {
+//       console.log(err);
+//     } else {
+//       console.log(invoices);
+//     }
+//   });
+// });
+// AddCustomer.start();
 module.exports = router;

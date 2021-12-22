@@ -49,11 +49,12 @@ module.exports = {
           .then((customers) => {
             //create services
             let updates = customers.response;
-            // console.log("all after pull length ", updates);
+            console.log("all after pull length ", updates);
             for (let i = 0; i < updates.length; i++) {
               splinxCustomers.push({
                 customer_number: updates[i].login,
                 customer_id: updates[i].id,
+                date_added: updates[i].date_add,
                 location: updates[i].location_id,
                 status: updates[i].status,
                 geolocation: updates[i].gps,
@@ -69,6 +70,7 @@ module.exports = {
                 fields: [
                   "customer_number",
                   "customer_id",
+                  "date_added",
                   "location",
                   "status",
                   "geolocation",
@@ -166,18 +168,18 @@ module.exports = {
       });
   },
   getCustomers(result) {
-    splinx
-      .findAll({
-        attributes: ["*"],
-        where: { processed: 0 },
-        raw: true,
-        limit: 200,
-      })
-      .then((leads) => {
-        result(null, leads);
-      })
-      .catch((err) => {
-        result(err, null);
-      });
+    splinx;
+    //     .findAll({
+    //       attributes: ["*"],
+    //       where: { processed: 0 },
+    //       raw: true,
+    //       limit: 200,
+    //     })
+    //     .then((leads) => {
+    //       result(null, leads);
+    //     })
+    //     .catch((err) => {
+    //       result(err, null);
+    //     });
   },
 };
