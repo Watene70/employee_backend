@@ -36,7 +36,7 @@ var getInvoicesCron = cron.schedule("0 1 * * *", () => {
 getInvoicesCron.start();
 
 //cron to fetch nav invoices sales line every 1 hour
-// var getSalesLineCron = cron.schedule("0 1 * * *", () => {
+var getSalesLineCron = cron.schedule("0 1 * * *", () => {
   InvoiceController.getNavSaleLines((err, invoices) => {
     if (err) {
       console.log("sales lines invoice error ",err);
@@ -44,7 +44,7 @@ getInvoicesCron.start();
       console.log("sales lines invoice today ",invoices);
     }
   });
-// });
-// getSalesLineCron.start(); //getNavSaleLines
+});
+getSalesLineCron.start(); //getNavSaleLines
 
 module.exports = router;
