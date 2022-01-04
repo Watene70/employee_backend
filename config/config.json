@@ -2,7 +2,7 @@
   "development": {
     "username": "root",
     "password": "r6r5bb!!",
-    "database": "crm_development",
+    "database": "pweza",
     "host": "169.239.171.27",
     "dialect": "mysql"
   },
