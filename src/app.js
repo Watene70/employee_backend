@@ -38,6 +38,7 @@ const {
   customer,
   tariff,
   location,
+  password,
 } = require("./routes");
 
 // Initialize routes
@@ -48,4 +49,5 @@ app.use("/ticket", ticket);
 app.use("/customer", customer);
 app.use("/tariff", tariff);
 app.use("/location", location);
+app.use("/password", password);
 module.exports = app;

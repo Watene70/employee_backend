@@ -4,6 +4,7 @@ const ticket = require("./ticket");
 const customer = require("./customer");
 const tariff = require("./tariff");
 const location = require("./location");
+const password = require("./password");
 
 module.exports = {
   invoice,
@@ -12,4 +13,5 @@ module.exports = {
   customer,
   tariff,
   location,
+  password,
 };

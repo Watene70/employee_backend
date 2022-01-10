@@ -17,6 +17,7 @@ router.get("/updateCustomerRouter", (req, res) => {
   CustomerController.getCustomers((err, cust) => {
     if (err) {
       res.status(400).json(err);
+      console.log("me")
     } else {
       if (cust.length > 0) {
         CustomerController.updateInternetServices(cust, (err, updated) => {

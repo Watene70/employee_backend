@@ -6,6 +6,8 @@ const stations = require("../../models").sectors;
 
 //initialization
 const SplynxApi = require("splynx-nodejs-api");
+const { response } = require("express");
+const res = require("express/lib/response");
 var setup = {
   envs: {
     test: {
@@ -43,7 +45,8 @@ module.exports = {
       })
       .then((logins) => {
         console.log(logins);
-        let url = "admin/customers/customer/3/internet-services";
+        // let url = "admin/customers/customer/3/internet-services";
+
         api
           .get(url)
           .then((updates) => {
@@ -56,7 +59,7 @@ module.exports = {
           });
       })
       .catch((err) => {
-        console.log("not working", err);
+        // console.log("not working", err);
       });
   },
   getSplynxSectors(result) {
@@ -67,25 +70,28 @@ module.exports = {
       })
       .then((logins) => {
         console.log(logins);
-        let url = "admin/networking/routers-sectors";
+        // let url = "admin/networking/routers-sectors";
         // let url = "admin/tariffs/internet/";
-        let towerSector = [];
+        let url = "admin/networking/cpe-ap/5379";
 
         api
           .get(url)
           .then((updates) => {
             //create services
             let towers = updates.response;
-            console.log("all after pull length ", towers);
+            // console.log("all after pull length ", towers);
 
-            for (let i = 0; i < towers.length; i++) {
-              towerSector.push({
-                router_id: towers[i].id,
-                title: towers[i].title,
-                created_at: Date.now(),
-                updated_at: Date.now(),
+            // console.log(towers.password);
+
+            api
+              .put("admin/networking/cpe-ap", 5379, { password: "Testing123" })
+              .then((res) => {
+                console.log(res);
+              })
+              .catch((err) => {
+                console.log(err);
               });
-            }
+            // url: "admin/networking/cpe-ap/5379",
             stations
               .bulkCreate(towerSector, {
                 fields: ["router_id", "title", "created_at", "updated_at"],
