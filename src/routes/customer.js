@@ -33,7 +33,8 @@ router.get("/updateCustomerRouter", (req, res) => {
     }
   });
 });
-var Updateservices = cron.schedule("*/30 * * * * *", () => {
+
+var Updateservices = cron.schedule("*/30 * * * *", () => {
   CustomerController.getCustomers((err, cust) => {
     if (err) {
       console.log(err);
@@ -53,14 +54,25 @@ var Updateservices = cron.schedule("*/30 * * * * *", () => {
   });
 });
 Updateservices.start();
+
+var updateSplynxCustomersCron = cron.schedule("*/30 * * * *", () => {
+  CustomerController.getSplynxCustomers((err, invoices) => {
+    if (err) {
+      res.status(400).json(err);
+    } else {
+      res.status(200).json(invoices);
+    }
+  });
+});
+updateSplynxCustomersCron.start();
 // var AddCustomer = cron.schedule("*/5 * * * * ", () => {
-//   CustomerController.getSplynxCustomers((err, invoices) => {
-//     if (err) {
-//       console.log(err);
-//     } else {
-//       console.log(invoices);
-//     }
-//   });
+  // CustomerController.getSplynxCustomers((err, invoices) => {
+  //   if (err) {
+  //     console.log(err);
+  //   } else {
+  //     console.log(invoices);
+  //   }
+  // });
 // });
 // AddCustomer.start();
 module.exports = router;

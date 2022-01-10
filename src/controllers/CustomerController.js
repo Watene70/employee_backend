@@ -33,6 +33,7 @@ var loadedConfig = setup.envs[env]; //declared variables in live and test
 //initialization
 const api = new SplynxApi(loadedConfig.SPLYNX_HOST);
 api.version = SplynxApi.API_VERSION_2_0;
+
 module.exports = {
   getSplynxCustomers(result) {
     api
@@ -43,13 +44,13 @@ module.exports = {
       .then((logins) => {
         let url = "admin/customers/customer";
         let splinxCustomers = [];
-        // console.log(splinxCustomers);
+        console.log(splinxCustomers);
         api
           .get(url)
           .then((customers) => {
             //create services
             let updates = customers.response;
-            console.log("all after pull length ", updates);
+            // console.log("all after pull length ", updates);
             for (let i = 0; i < updates.length; i++) {
               splinxCustomers.push({
                 customer_number: updates[i].login,
@@ -70,8 +71,8 @@ module.exports = {
                 fields: [
                   "customer_number",
                   "customer_id",
-                  "date_added",
                   "location",
+                  "date_added",
                   "status",
                   "geolocation",
                   "created_at",
@@ -121,65 +122,124 @@ module.exports = {
     // console.log(logins);
   },
 
+  // updateInternetServices(data, result) {
+  //   api
+  //     .login(SplynxApi.LOGIN_TYPE_API_KEY, {
+  //       key: loadedConfig.API_KEY,
+  //       secret: loadedConfig.API_SECRET,
+  //     })
+  //     .then((logins) => {
+  //       // console.log("found customElements", data);
+  //       for (let i = 0; i < data.length; i++) {
+  //         console.log("found customer", data[i].customer_id);
+  //         // admin/customers/customer/3/internet-services
+  //         let urls =
+  //           "admin/customers/customer/" +
+  //           data[i].customer_id +
+  //           "/internet-services";
+  //         api
+  //           .get(urls)
+  //           .then((updates) => {
+  //             // update customertable
+  //               console.log("found service", updates);
+  //             let resp = updates.response;
+  //             let datas = {
+  //               processed: 1,
+  //               package: resp[resp.length - 1].tariff_id,
+  //               router_contention: resp[resp.length - 1].sector_id,
+  //             };
+  //             // console.log("to update fields", datas);
+  //             splinx
+  //               .update(datas, { where: { customer_id: data[i].customer_id } })
+  //               .then((upda) => {
+  //                 console.log(upda);
+  //               })
+  //               .catch((err) => {
+  //                 console.log(err);
+  //               });
+  //           })
+  //           .catch((err) => {
+  //             console.log("error getting service", err);
+  //           });
+  //       }
+  //       result(null, "customers updated");
+  //     })
+  //     .catch((err) => {
+  //       // console.log("not working", err);
+  //     });
+  // },
+  
   updateInternetServices(data, result) {
-    api
-      .login(SplynxApi.LOGIN_TYPE_API_KEY, {
-        key: loadedConfig.API_KEY,
-        secret: loadedConfig.API_SECRET,
-      })
-      .then((logins) => {
+    splinx.findAll({
+      raw: true,
+      order: [["id", "DESC"]],
+    })
+      .then((updates) => {
         // console.log("found customElements", data);
-        for (let i = 0; i < data.length; i++) {
-          // console.log("found customer", data[i].customer_id);
-          // admin/customers/customer/3/internet-services
-          let urls =
-            "admin/customers/customer/" +
-            data[i].customer_id +
-            "/internet-services";
-          api
-            .get(urls)
-            .then((updates) => {
-              // update customertable
-              //   console.log("found service", updates);
-              let resp = updates.response;
-              let datas = {
-                processed: 1,
-                package: resp[resp.length - 1].tariff_id,
-                router_contention: resp[resp.length - 1].sector_id,
-              };
-              console.log("to update fields", datas);
-              splinx
-                .update(datas, { where: { customer_id: data[i].customer_id } })
-                .then((upda) => {
-                  console.log(upda);
+        // console.log("customer records ", updates[0].customer_number);
+        api
+        .login(SplynxApi.LOGIN_TYPE_API_KEY, {
+          key: loadedConfig.API_KEY,
+          secret: loadedConfig.API_SECRET,
+        })
+        .then((logins) => {
+          for (let i = 0; i < updates.length; i++) {
+            if(updates[i].customer_id){
+              console.log("customer records ",updates[i].customer_id);
+              // admin/customers/customer/3/internet-services
+              let urls =
+                "admin/customers/customer/" +
+                updates[i].customer_id +
+                "/internet-services";
+              api
+                .get(urls)
+                .then((updates) => {
+                  // update customertable
+                  let resp = updates.response;
+                  let datas = {
+                    processed: 1,
+                    package: resp[resp.length - 1].tariff_id,
+                    router_contention: resp[resp.length - 1].sector_id,
+                  };
+                  console.log("found service for",updates[i].customer_number, updates);
+
+                  splinx
+                    .update(datas, { where: { customer_id: data[i].customer_id } })
+                    .then((upda) => {
+                      console.log(upda);
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                    });
                 })
                 .catch((err) => {
-                  console.log(err);
+                  console.log("error getting service", err);
                 });
-            })
-            .catch((err) => {
-              console.log("error getting service", err);
-            });
-        }
-        result(null, "customers updated");
-      })
-      .catch((err) => {
-        // console.log("not working", err);
-      });
+            }
+          }
+        })//end then
+        .catch((err) => {
+          result(err, null);
+        }); //catch for slynx login  
+          // result(null, "customers updated");
+        })
+        .catch((err) => {
+          result(err, null);
+        });             
   },
   getCustomers(result) {
-    splinx;
-    //     .findAll({
-    //       attributes: ["*"],
-    //       where: { processed: 0 },
-    //       raw: true,
-    //       limit: 200,
-    //     })
-    //     .then((leads) => {
-    //       result(null, leads);
-    //     })
-    //     .catch((err) => {
-    //       result(err, null);
-    //     });
+    splinx
+      .findAll({
+        attributes: ["*"],
+        where: { processed: 0 },
+        raw: true,
+        limit: 200,
+      })
+      .then((leads) => {
+        result(null, leads);
+      })
+      .catch((err) => {
+        result(err, null);
+      });
   },
 };
