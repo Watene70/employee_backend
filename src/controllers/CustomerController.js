@@ -55,6 +55,7 @@ module.exports = {
               splinxCustomers.push({
                 customer_number: updates[i].login,
                 customer_id: updates[i].id,
+                date_added: updates[i].date_add,
                 location: updates[i].location_id,
                 status: updates[i].status,
                 geolocation: updates[i].gps,
