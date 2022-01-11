@@ -57,9 +57,9 @@ Updateservices.start();
 var updateSplynxCustomersCron = cron.schedule("*/30 * * * *", () => {
   CustomerController.getSplynxCustomers((err, invoices) => {
     if (err) {
-      res.status(400).json(err);
+      // res.status(400).json(err);
     } else {
-      res.status(200).json(invoices);
+      // res.status(200).json(invoices);
     }
   });
 });
