@@ -23,6 +23,6 @@ var getTariffCron = cron.schedule("0 1 * * *", () => {
     }
   });
 });
-getTariffCron.start(); 
+getTariffCron.start();
 
 module.exports = router;
