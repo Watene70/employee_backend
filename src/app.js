@@ -1,6 +1,7 @@
 // Importing packages
 const express = require("express");
 const bodyParser = require("body-parser");
+const passport = require("passport");
 
 const app = express();
 
@@ -30,24 +31,18 @@ app.use(
   })
 );
 
+// Initialize passport for authenticated routes
+app.use(passport.initialize());
+require("./passport")(passport);
+
 // Import routes
-const {
-  invoice,
-  sector,
-  ticket,
-  customer,
-  tariff,
-  location,
-  password,
-} = require("./routes");
+const { assesment, topics, users, questions } = require("./routes");
 
 // Initialize routes
 
-app.use("/invoice", invoice);
-app.use("/sector", sector);
-app.use("/ticket", ticket);
-app.use("/customer", customer);
-app.use("/tariff", tariff);
-app.use("/location", location);
-app.use("/password", password);
+app.use("/assesment", assesment);
+app.use("/topics", topics);
+app.use("/users", users);
+app.use("/questions", questions);
+
 module.exports = app;

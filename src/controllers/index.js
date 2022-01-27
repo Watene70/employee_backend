@@ -1,14 +1,11 @@
-const InvoiceController = require("./InvoiceController");
-const SectorController = require("./SectorController");
-const TicketController = require("./TicketController");
-const CustomerController = require("./CustomerController");
-const tariffController = require("./tariffController");
-const LocationController = require("./LocationController");
+const topicsController = require("./topicsController");
+const assesmentController = require("./assesmentController");
+const questionsController = require("./questionsController");
+const usersController = require("./usersController");
+
 module.exports = {
-  InvoiceController,
-  SectorController,
-  TicketController,
-  CustomerController,
-  tariffController,
-  LocationController,
+  topicsController,
+  questionsController,
+  usersController,
+  assesmentController,
 };
